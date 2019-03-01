@@ -4,14 +4,41 @@ plugins {
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+apply plugin: 'org.akhikhl.gretty'
+
 
 group = 'net.thethirdplace'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava.option.encoding = 'UTF-8'
+
 
 repositories {
+    jcenter()
     mavenCentral()
 }
+
+gretty{
+    httpPort = 8080
+    contextPath = '/'
+    servletContainer = 'jetty9'
+}
+
+def webappDir = '$rootDir/web'
+
+idea{
+    module{
+        downloadSources = true
+        downloadJavadoc = true
+        inheritOutputDirs = false
+        outputDir = file("${buildDir}/classes/main")
+    }
+
+}
+
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
@@ -27,4 +54,5 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    classpath 'org.akhikhl.gretty:gretty:+'
 }
