@@ -13,4 +13,9 @@ public class IndexController {
     public String index(){
         return "index";
     }
+
+    @GetMapping("/reserve")
+    public String reserve(){
+        return "reserve";
+    }
 }
