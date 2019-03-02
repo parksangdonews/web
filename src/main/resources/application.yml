@@ -1,0 +1,2 @@
+spring.mvc.static-path-pattern: /static/static/**
+spring.resources.static-locations: classpath:/static/
