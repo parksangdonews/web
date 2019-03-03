@@ -44,4 +44,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.12.0'
+
 }
