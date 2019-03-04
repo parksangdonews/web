@@ -4,7 +4,6 @@ plugins {
 }
 
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'war'
 
 
 group = 'net.thethirdplace'
