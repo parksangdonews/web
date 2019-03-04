@@ -47,7 +47,7 @@ public class BookingService {
 
     @PostConstruct
     public void setup(){
-        mongoTemplate.dropCollection(Booking.class);
-        mongoTemplate.createCollection(Booking.class);
+        /*mongoTemplate.dropCollection(Booking.class);
+        mongoTemplate.createCollection(Booking.class);*/
     }
 }
