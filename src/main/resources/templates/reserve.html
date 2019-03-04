@@ -5,12 +5,196 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        #wrap {
+            width: 1100px;
+            margin: 0 auto;
+        }
+
+        #external-events {
+            float: left;
+            width: 150px;
+            padding: 0 10px;
+            text-align: left;
+        }
+
+        #external-events h4 {
+            font-size: 16px;
+            margin-top: 0;
+            padding-top: 1em;
+        }
+
+        .external-event { /* try to mimick the look of a real event */
+            margin: 10px 0;
+            padding: 2px 4px;
+            background: #3366CC;
+            color: #fff;
+            font-size: .85em;
+            cursor: pointer;
+        }
+
+        #external-events p {
+            margin: 1.5em 0;
+            font-size: 11px;
+            color: #666;
+        }
+
+        #external-events p input {
+            margin: 0;
+            vertical-align: middle;
+        }
+
+        #calendar {
+            /* 		float: right; */
+            margin: 0 auto;
+            width: 900px;
+            background-color: #FFFFFF;
+            border-radius: 6px;
+            box-shadow: 0 1px 2px #C3C3C3;
+            -webkit-box-shadow: 0px 0px 21px 2px rgba(0,0,0,0.18);
+            -moz-box-shadow: 0px 0px 21px 2px rgba(0,0,0,0.18);
+            box-shadow: 0px 0px 21px 2px rgba(0,0,0,0.18);
+        }
+        .fc-day > div{
+            min-height: 106px;
+        }
+        .fc-event-inner .fc-event-title{
+            padding: 5px;
+        }
+    </style>
+    <div layout:fragment="page-style">
+        <link rel="stylesheet" href="/static/static/css/fullcalendar.css">
+    </div>
 </head>
 <body>
 <div layout:fragment="content_body">
-    reserve
-</div>
 
+    <div id='wrap'>
+        <h1>예약하기</h1>
+        <div id="calendar" class="fc fc-ltr">
+            <table class="fc-header" style="width:100%">
+                <tr>
+                    <td class="fc-header-left">
+                        <span class="fc-header-title"><h2>{{month}}월 {{year}}</h2></span>
+                    </td>
+                    <td class="fc-header-right">
+                <span class="fc-button fc-button-prev fc-state-default fc-corner-left" @click="left">
+                    <span class="fc-text-arrow">‹</span>
+                </span>
+                        <span class="fc-button fc-button-next fc-state-default fc-corner-right" @click="right">
+                    <span class="fc-text-arrow" >›</span>
+                </span>
+                        <span class="fc-header-space"></span>
+                        <span class="fc-button fc-button-today fc-state-default fc-corner-left fc-corner-right fc-state-disabled" @click="initToday">today</span>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="fc-content" style="position: relative;">
+                <div class="fc-view fc-view-month fc-grid" style="position:relative" unselectable="on">
+                    <div class="fc-event-container" style="position:absolute;z-index:8;top:0;left:0"></div>
+
+                    <table class="fc-border-separate" style="width:100%" cellspacing="0">
+                        <thead>
+                        <tr class="fc-first fc-last">
+                            <th class="fc-day-header fc-mon fc-widget-header fc-first" style="width: 128px;">일</th>
+                            <th class="fc-day-header fc-tue fc-widget-header" style="width: 128px;">월</th>
+                            <th class="fc-day-header fc-wed fc-widget-header" style="width: 128px;">화</th>
+                            <th class="fc-day-header fc-thu fc-widget-header" style="width: 128px;">수</th>
+                            <th class="fc-day-header fc-fri fc-widget-header" style="width: 128px;">목</th>
+                            <th class="fc-day-header fc-sat fc-widget-header" style="width: 128px;">금</th>
+                            <th class="fc-day-header fc-sun fc-widget-header fc-last">토</th></tr>
+                        </thead>
+                        <tbody>
+                        <tr class="fc-week" v-for="weekDays in weeks">
+                            <td class="fc-day fc-mon fc-widget-content" v-for="day in weekDays"
+                                v-bind:class="isPast(day.day)" :data-date="day.date">
+                                <div @click="newBook(day)">
+                                    <div class="fc-day-number">{{day.day.date()}}</div>
+                                    <div class="fc-day-content">
+                                        <div class="content" style="position: relative; height: auto;">&nbsp;</div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div style='clear:both'></div>
+    </div>
+
+    <div class="portfolio-modal modal fade" id="modal-calendar" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="close-modal" data-dismiss="modal">
+                    <div class="lr">
+                        <div class="rl"></div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 mx-auto">
+                            <div class="modal-body">
+                                <!-- Project Details Go Here -->
+
+                                <div class="form-group">
+                                    <input class="form-control" id="name" type="text" placeholder="이름" required="required"
+                                           name="name"
+                                           data-validation-required-message="Please enter your name."
+                                    value="arahansa">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+
+                                <div class="form-group">
+                                    <input class="form-control" id="people" type="number" placeholder="인원" required="required"
+                                           name="name"
+                                           data-validation-required-message="Please enter your name."
+                                           value="1">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+
+                                <div class="form-group">
+                                    <input class="form-control" id="contact" type="text" placeholder="연락처" required="required"
+                                           name="contact"
+                                           data-validation-required-message="Please enter your name."
+                                           value="1234"
+                                    >
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group">
+                                    <span>예상 시작 시간 : </span>
+                                    <select id="bookStart" name="bookStart">
+                                        <option>16:30</option>
+                                        <option>17:30</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <span>예상 종료 시간 : </span>
+                                    <select id="bookEnd" name="bookEnd">
+                                        <option>17:30</option>
+                                    </select>
+                                </div>
+                                <input type="text" id="tempDay">
+                                <button id="submitBooking" class="btn btn-primary" type="button">예약</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div layout:fragment="page-script">
+    <script src="/static/static/js/moment.js"></script>
+    <script src="/static/static/js/vue.min.js"></script>
+    <script src="/static/static/js/vue-booking.js"></script>
+    <script src="/static/static/js/lib/booking.js"></script>
+</div>
 
 </body>
 </html>
