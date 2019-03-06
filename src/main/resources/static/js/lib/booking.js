@@ -1,9 +1,32 @@
+
+function createTimes(){
+    let sumTemplate=''
+    for(let i=9;i<=21;i++){
+
+        if(i.toString().length < 2){
+            i = "0"+i
+        }
+        let template = `
+            <option>${i}:00</option>
+            <option>${i}:30</option>
+        `
+        sumTemplate = sumTemplate + template
+    }
+    sumTemplate += "<option>22:00</option>"
+    $("#bookStart").html(sumTemplate)
+    $("#bookEnd").html(sumTemplate)
+}
+
+createTimes()
+
+
 function submitBooking(e){
 
     const username = $("#name").val()
     const contact = $("#contact").val()
     const start = $("#tempDay").val() + $("#bookStart option:selected").val()
     const end = $("#tempDay").val() + $("#bookEnd option:selected").val()
+    const people = $("#people").val()
 
     if(username===""){
         alert("이름을 입력해주세요")
@@ -18,7 +41,8 @@ function submitBooking(e){
         username : username,
         contact: contact,
         start: start,
-        end: end
+        end: end,
+        people: people
     }
 
     $.ajax({

@@ -16,6 +16,7 @@ public class Booking {
     String id;
     String username;
     String contact;
+    Integer people;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime start;

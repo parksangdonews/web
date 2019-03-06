@@ -2,7 +2,9 @@ package net.thethirdplace.web.service;
 
 import net.thethirdplace.web.domain.Booking;
 import net.thethirdplace.web.dto.BookingDto;
+import net.thethirdplace.web.dto.SlackMsg;
 import net.thethirdplace.web.repository.BookingRepository;
+import net.thethirdplace.web.support.SlackSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -28,10 +30,13 @@ public class BookingService {
     BookingRepository bookingRepository;
     @Autowired
     MongoTemplate mongoTemplate;
+    @Autowired
+    SlackSender slackSender;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public Booking save(Booking booking){
+        slackSender.send("사용자 : " + booking.getUsername() + ", 시작 날짜 : " + booking.getStart() + ", 종료일시 : " + booking.getEnd() + ", 인원수 : " + booking.getPeople());
         return bookingRepository.save(booking);
     }
 
