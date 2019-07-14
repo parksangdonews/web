@@ -11,6 +11,9 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(){
+
+        System.out.println("무언가내용을...");
+
         return "index";
     }
 
